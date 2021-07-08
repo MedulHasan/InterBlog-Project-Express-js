@@ -1,0 +1,65 @@
+<%- include('../../../partials/head.ejs') %>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.css">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <%- include('../../../partials/sidebar.ejs') %>
+        </div>
+        <div class="col-md-10 my-5">
+            <div class="card card-body mx-5 py-5">
+                <h5 class="my-2">Edit Your Post</h5>
+                <form action="/posts/edit/<%= post._id %>" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="title">Enter Your Title</label>
+                        <input type="text" name="title" id="title" class="form-control <%= error.title ? 'is-invalid' : '' %>" value="<%= post.title%>">
+                        <div class="invalid-feedback">
+                            <%= error.title %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tiny-ce-post-body">Enter Your Post Body</label>
+                        <textarea name="body" id="tiny-mce-posy-body" class="form-control <%= error.body ? 'is-invalid' : '' %>"><%- post.body %></textarea>
+                        <div class="invalid-feedback">
+                            <%= error.body %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Enter Some Tags</label>
+                        <input type="text" name="tags" id="tags" placeholder="tag1, tag2, tag3" class="form-control" value="<%= post.tags.length > 0 ? post.tags.join(', ') : '' %>">
+                    </div>
+                    <label>Post Thumbnail</label>
+                    <% if(post.thumbnail) { %>
+                        <img src="<%= post.thumbnail %>" alt="post-thumbnail" class="img-fluid mb-4" id="thumbnail">
+                    <% } %>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >Upload</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" id="inputGroupFile"  name="post-thumbnail" class="custom-file-input">
+                            <label for="inputGroutFile" class="custom-file-label">Choose File</label>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Update Post">
+                    <a class="btn btn-danger" href="/posts/delete/<%= post._id %>">Delete Post</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../../partials/footer.ejs') %>
+<script src="https://cdn.tiny.cloud/1/fy2tka415956gksn40xt50vd7pnfmzs87yyc22boj8b0eup4/tinymce/5/tinymce.min.js"></script>
+<script src="/script/tinymce.js"></script>
+
+<script>
+    $('#inputGroupFile').on('change', function(e) {
+        let filename = e.target.files[0].name
+        $(this).next('.custom-file-label').html(filename)
+    })
+</script>
+
+</body>
+</html>
